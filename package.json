@@ -6,6 +6,17 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
+    "dependencies": {
+        "mongodb": "^1.4.19",
+        "bluebird": "^2.3.6"
+    },
+    "devDependencies": {
+        "mocha": "1.21.5",
+        "sinon": "1.10.3",
+        "chai": "1.9.2",
+        "eslint": "0.8.2",
+        "istanbul": "0.3.2"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/lxanders/mongobird.git"

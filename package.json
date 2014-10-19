@@ -1,0 +1,24 @@
+{
+    "name": "mongobird",
+    "version": "0.0.0-dev",
+    "description": "Bluebird aware mongoDB driver.",
+    "main": "lib/mongobird.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lxanders/mongobird.git"
+    },
+    "keywords": [
+        "mongodb",
+        "promise",
+        "promises",
+        "bluebird"
+    ],
+    "author": "Alexander Schmidt <alexanderschmidt1@gmail.com>",
+    "contributors": [
+        "Mathias Schreck <schreck.mathias@gmail.com>"
+    ],
+    "license": "MIT"
+}

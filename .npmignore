@@ -1,0 +1,8 @@
+.git/
+.gitignore
+build/
+test/
+.DS_Store
+.travis.yml
+*.iml
+.idea/

@@ -1,2 +1,4 @@
+*.iml
+.idea
+build
 node_modules
-build/

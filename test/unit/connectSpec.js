@@ -83,7 +83,7 @@ describe('connect', function () {
             var dbName = 'interestingDb',
                 expectedConnectionString = 'mongodb://user:pass@host:27017,different:1234/' + dbName + '?any=true&no=1';
 
-            expect(connection.information.db).to.not.exist;
+            expect(connection.information).to.not.have.property('db');
             expect(connection.getDb(dbName).connectionString).to.equal(expectedConnectionString);
         });
 

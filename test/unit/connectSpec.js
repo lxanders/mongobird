@@ -58,7 +58,7 @@ describe('connect', function () {
             var connection = connect(testCase.input);
 
             expect(connection).to.have.property('getDb');
-            expect(typeof connection.getDb === 'function');
+            expect(connection.getDb).to.be.a('function');
             expect(connection.information).to.deep.equal(testCase.expectedConnection);
 
         });

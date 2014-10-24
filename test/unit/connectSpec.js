@@ -91,7 +91,7 @@ describe('connect', function () {
             var expectedErrorMessage = 'Invalid database name provided. Information: ';
 
             expect(connection.getDb.bind(null, '')).to.throw(expectedErrorMessage);
-            expect(connection.getDb.bind(null)).to.throw(expectedErrorMessage + 'undefined');
+            expect(connection.getDb).to.throw(expectedErrorMessage + 'undefined');
         });
 
         it('should throw an error if connection information data is modified', function () {

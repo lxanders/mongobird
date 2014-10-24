@@ -95,6 +95,12 @@ describe('connect', function () {
             expect(connection.getDb).to.throw(expectedErrorMessage + 'undefined');
         });
 
+        it('should throw an error if the database name is not a string', function () {
+            var expectedErrorMessage = 'Invalid database name provided. Information: ';
+
+            expect(connection.getDb.bind(null, [ 'an', 'array' ])).to.throw(expectedErrorMessage);
+        });
+
         it('should throw an error if connection information data is modified', function () {
             var expectedErrorMessage = 'Cannot assign to read only property',
                 changeConnection = function () {

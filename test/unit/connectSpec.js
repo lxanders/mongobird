@@ -94,14 +94,31 @@ describe('connect', function () {
             expect(connection.getDb.bind(null)).to.throw(expectedErrorMessage + 'undefined');
         });
 
-        it('should use the original connection information even if it gets corrupted', function () {
-            var dbName = 'interestingDb',
-                expectedConnectionString = 'mongodb://user:pass@host:27017,different:1234/' + dbName + '?any=true&no=1';
+        it('should throw an error if connection information data is modified', function () {
+            var expectedErrorMessage = 'Cannot assign to read only property',
+                changeConnection = function () {
+                    connection.information = {};
+                },
+                changeHosts = function () {
+                    connection.information.hosts = []
+                },
+                changeGetDb = function () {
+                    connection.getDb = function () {}
+                };
 
-            connection.information.hosts = [];
-
-            expect(connection.getDb(dbName).connectionString).to.equal(expectedConnectionString);
+            expect(changeConnection).to.throw(expectedErrorMessage);
+            expect(changeHosts).to.throw(expectedErrorMessage);
+            expect(changeGetDb).to.throw(expectedErrorMessage)
         });
+
+        it('should throw an error if the connection object gets extended', function () {
+            var expectedErrorMessage = 'Can\'t add property something, object is not extensible',
+                addProperty = function () {
+                    connection.something = 'new';
+                };
+
+            expect(addProperty).to.throw(expectedErrorMessage);
+        })
 
     });
 

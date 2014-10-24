@@ -23,7 +23,8 @@ describe('connect', function () {
                 expectedConnection: {
                     auth: {
                         user: 'anyuser',
-                        pass: 'withpassword'},
+                        pass: 'withpassword'
+                    },
                     hosts: [
                         {
                             host: 'anyhost',

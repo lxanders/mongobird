@@ -1,4 +1,5 @@
 [![Build Status](https://img.shields.io/travis/lxanders/mongobird.svg?style=flat)](https://travis-ci.org/lxanders/mongobird)
+[![Dependencies](http://img.shields.io/david/lxanders/mongobird.svg?style=flat)](https://david-dm.org/lxanders/mongobird)
 
 -----
 

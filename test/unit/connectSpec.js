@@ -4,7 +4,6 @@ var expect = require('chai').expect,
     connect = require('../../lib/connect');
 
 describe('connect', function () {
-
     var validTestCases = [
             {
                 description: 'return a minimal connection object',
@@ -61,7 +60,6 @@ describe('connect', function () {
             expect(connection).to.have.property('getDb');
             expect(connection.getDb).to.be.a('function');
             expect(connection.information).to.deep.equal(testCase.expectedConnection);
-
         });
     });
 
@@ -72,7 +70,6 @@ describe('connect', function () {
     });
 
     describe('getDb', function () {
-
         var connectionString = 'user:pass@host,different:1234/anyDB?any=true&no=1',
             connection;
 
@@ -107,15 +104,15 @@ describe('connect', function () {
                     connection.information = {};
                 },
                 changeHosts = function () {
-                    connection.information.hosts = []
+                    connection.information.hosts = [];
                 },
                 changeGetDb = function () {
-                    connection.getDb = function () {}
+                    connection.getDb = function () {};
                 };
 
             expect(changeConnection).to.throw(expectedErrorMessage);
             expect(changeHosts).to.throw(expectedErrorMessage);
-            expect(changeGetDb).to.throw(expectedErrorMessage)
+            expect(changeGetDb).to.throw(expectedErrorMessage);
         });
 
         it('should throw an error if the connection object gets extended', function () {
@@ -125,8 +122,6 @@ describe('connect', function () {
                 };
 
             expect(addProperty).to.throw(expectedErrorMessage);
-        })
-
+        });
     });
-
 });

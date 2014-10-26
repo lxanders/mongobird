@@ -21,11 +21,13 @@
     "devDependencies": {
         "mocha": "2.0.1",
         "sinon": "1.10.3",
+        "sinon-chai": "2.6.0",
         "chai": "1.9.2",
         "eslint": "0.9.1",
         "eslint-plugin-mocha": "0.2.2",
         "istanbul": "0.3.2",
-        "coveralls": "2.11.2"
+        "coveralls": "2.11.2",
+        "proxyquire": "1.0.1"
     },
     "repository": {
         "type": "git",

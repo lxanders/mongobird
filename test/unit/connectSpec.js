@@ -3,7 +3,7 @@
 var expect = require('chai').expect,
     connect = require('../../lib/connect');
 
-describe('connect', function () {
+describe('mongoUri', function () {
     var validTestCases = [
             {
                 description: 'return a minimal connection object',

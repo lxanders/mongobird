@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/travis/lxanders/mongobird/master.svg?style=flat)](https://travis-ci.org/lxanders/mongobird.svg?branch=master)
+[![Build Status](https://img.shields.io/travis/lxanders/mongobird/master.svg?style=flat)](https://travis-ci.org/lxanders/mongobird)
 [![Coverage Status](https://img.shields.io/coveralls/lxanders/mongobird.svg?style=flat)](https://coveralls.io/r/lxanders/mongobird)
 [![Dependencies](http://img.shields.io/david/lxanders/mongobird.svg?style=flat)](https://david-dm.org/lxanders/mongobird)
 

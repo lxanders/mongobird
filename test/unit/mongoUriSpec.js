@@ -10,15 +10,16 @@ var chai = require('chai'),
 chai.use(sinonChai);
 
 describe('parse', function () {
-    var muriStub;
+    var muriStub,
+        mongoUriWithMuriStub;
 
     beforeEach(function () {
         muriStub = sinon.stub();
+        mongoUriWithMuriStub = proxyquire('../../lib/mongoUri', { muri: muriStub });
     });
 
     it('should call the parse dependency with the correct connection string', function () {
-        var connectionString = 'mongodb://some:one@anyhost:1234/anyDb?any=thing',
-            mongoUriWithMuriStub = proxyquire('../../lib/mongoUri', { muri: muriStub });
+        var connectionString = 'mongodb://some:one@anyhost:1234/anyDb?any=thing';
 
         mongoUriWithMuriStub.parse(connectionString);
 
@@ -27,8 +28,7 @@ describe('parse', function () {
     });
 
     it('should parse successfully if the mongodb identifier is missing', function () {
-        var connectionString = 'some:one@anyhost:1234/anyDb?any=thing',
-            mongoUriWithMuriStub = proxyquire('../../lib/mongoUri', { muri: muriStub });
+        var connectionString = 'some:one@anyhost:1234/anyDb?any=thing';
 
         mongoUriWithMuriStub.parse(connectionString);
 

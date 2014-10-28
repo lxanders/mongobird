@@ -20,7 +20,7 @@
     },
     "devDependencies": {
         "mocha": "2.0.1",
-        "sinon": "1.10.3",
+        "sinon": "1.11.1",
         "sinon-chai": "2.6.0",
         "chai": "1.9.2",
         "eslint": "0.9.1",

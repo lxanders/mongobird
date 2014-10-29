@@ -1,60 +1,100 @@
 'use strict';
 
-var expect = require('chai').expect,
-    connect = require('../../lib/connect');
+var chai = require('chai'),
+    expect = chai.expect,
+    mongodb = require('mongodb'),
+    sinon = require('sinon'),
+    database = require('../../lib/database');
 
-describe('database getDb', function () {
-    var connectionString = 'user:pass@host,different:1234/anyDB?any=true&no=1',
-        connection;
+chai.use(require('sinon-chai'));
+
+describe('database', function () {
+    var getDb,
+        connectionInformation = {
+            hosts: [
+                { host: 'host', port: 27017 },
+                { host: 'different', port: 1234 }
+            ],
+            options: {
+                any: true,
+                no: 1
+            },
+            auth: {
+                user: 'user',
+                pass: 'pass'
+            }
+        };
 
     beforeEach(function () {
-        connection = connect(connectionString);
+        getDb = database.getDb.bind(null, connectionInformation);
     });
 
-    it('should return a database representation with a valid connection string', function () {
-        var dbName = 'interestingDb',
-            expectedConnectionString = 'mongodb://user:pass@host:27017,different:1234/' + dbName + '?any=true&no=1';
+    describe('getDb', function () {
+        it('should return a database representation with a valid connection string', function () {
+            var dbName = 'interestingDb',
+                expectedConnectionString = 'mongodb://user:pass@host:27017,different:1234/' + dbName + '?any=true&no=1';
 
-        expect(connection.information).to.not.have.property('db');
-        expect(connection.getDb(dbName).connectionString).to.equal(expectedConnectionString);
+            expect(getDb(dbName).connectionString).to.equal(expectedConnectionString);
+        });
+
+        it('should throw an error if the database name is missing', function () {
+            var expectedErrorMessage = 'Invalid database name provided. Information: ';
+
+            expect(getDb.bind(null, '')).to.throw(expectedErrorMessage);
+            expect(getDb).to.throw(expectedErrorMessage + 'undefined');
+        });
+
+        it('should throw an error if the database name is not a string', function () {
+            var expectedErrorMessage = 'Invalid database name provided. Information: ';
+
+            expect(getDb.bind(null, [ 'an', 'array' ])).to.throw(expectedErrorMessage);
+        });
+
+        it('should throw an error if connection information of the db is modified', function () {
+            var expectedErrorMessage = 'Cannot assign to read only property',
+                db = getDb('anyDb'),
+                changeInformation = function () {
+                    db.information = {};
+                },
+                changeDb = function () {
+                    db.information.db = 'otherDb';
+                };
+
+            expect(changeInformation).to.throw(expectedErrorMessage);
+            expect(changeDb).to.throw(expectedErrorMessage);
+        });
     });
 
-    it('should throw an error if the database name is missing', function () {
-        var expectedErrorMessage = 'Invalid database name provided. Information: ';
+    describe('ensureConnection', function () {
+        var db,
+            connect;
 
-        expect(connection.getDb.bind(null, '')).to.throw(expectedErrorMessage);
-        expect(connection.getDb).to.throw(expectedErrorMessage + 'undefined');
-    });
+        beforeEach(function () {
+            db = getDb('anyDb');
+            connect = sinon.stub(mongodb.MongoClient, 'connect');
+            connect.yields(null, {});
+        });
 
-    it('should throw an error if the database name is not a string', function () {
-        var expectedErrorMessage = 'Invalid database name provided. Information: ';
+        afterEach(function () {
+            connect.restore();
+        });
 
-        expect(connection.getDb.bind(null, [ 'an', 'array' ])).to.throw(expectedErrorMessage);
-    });
+        it('should establish a connection only once', function () {
+            var connection;
 
-    it('should throw an error if connection information data is modified', function () {
-        var expectedErrorMessage = 'Cannot assign to read only property',
-            changeConnection = function () {
-                connection.information = {};
-            },
-            changeHosts = function () {
-                connection.information.hosts = [];
-            },
-            changeGetDb = function () {
-                connection.getDb = function () {};
-            };
+            return db.ensureConnection(db.connectionString)
+                .then(function (firstConnection) {
+                    expect(connect).to.have.been.calledOnce
+                        .and.to.have.been.calledWith(db.connectionString);
 
-        expect(changeConnection).to.throw(expectedErrorMessage);
-        expect(changeHosts).to.throw(expectedErrorMessage);
-        expect(changeGetDb).to.throw(expectedErrorMessage);
-    });
-
-    it('should throw an error if the connection object gets extended', function () {
-        var expectedErrorMessage = 'Can\'t add property something, object is not extensible',
-            addProperty = function () {
-                connection.something = 'new';
-            };
-
-        expect(addProperty).to.throw(expectedErrorMessage);
+                    connect.reset();
+                    connection = firstConnection;
+                })
+                .then(db.ensureConnection.bind(null, db.connectionString))
+                .then(function (secondConnection) {
+                    expect(connect).not.to.have.been.called;
+                    expect(secondConnection).to.equal(connection);
+                });
+        });
     });
 });

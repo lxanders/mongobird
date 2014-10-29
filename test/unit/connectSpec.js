@@ -68,4 +68,18 @@ describe('connect', function () {
             expect(connect.bind(null, testCase.input)).to.throw(testCase.expectedErrorMessage);
         });
     });
+
+    it('should throw an error if connection information data is modified', function () {
+        var expectedErrorMessage = 'Cannot assign to read only property',
+            connection = connect('anyhost'),
+            changeConnection = function () {
+                connection.information = {};
+            },
+            changeHosts = function () {
+                connection.information.hosts = [];
+            };
+
+        expect(changeConnection).to.throw(expectedErrorMessage);
+        expect(changeHosts).to.throw(expectedErrorMessage);
+    });
 });

@@ -48,7 +48,7 @@ describe('connect', function () {
         invalidTestCases = [
             {
                 description: 'missing hostnames',
-                input: '',
+                input: 'mongodb://',
                 expectedErrorMessage: 'Invalid mongodb uri. Missing hostname'
             }
         ];

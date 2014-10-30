@@ -36,6 +36,29 @@ describe('mongoUri', function () {
             expect(muriStub).to.have.been.calledOnce;
             expect(muriStub).to.have.been.calledWithExactly('mongodb://' + connectionString);
         });
+
+        describe('invalid connection string', function () {
+            var testCases = [
+                { connectionString: '' },
+                { connectionString: {} },
+                { connectionString: [] },
+                { connectionString: [ 'any', 'content' ] },
+                { connectionString: 42 },
+                { connectionString: null },
+                {}
+            ];
+
+            testCases.forEach(function (testCase) {
+                it('should throw an error for connectionString=' + testCase.connectionString, function () {
+                    var parse = mongoUri.parse.bind(null, testCase.connectionString),
+                        expectedErrorMessage = 'Invalid connection string. Provided connection string: ';
+
+                    expectedErrorMessage += testCase.connectionString;
+
+                    expect(parse).to.throw(expectedErrorMessage);
+                });
+            });
+        });
     });
 
     describe('format', function () {

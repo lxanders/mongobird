@@ -69,6 +69,108 @@ usersCollection.insert({ username: 'anyUser' })
 
 See the more detailed example above for a better understanding how everything works.
 
+## explained example
+
+This is a more complex example. See the notes below it to understand how it works internally.
+
+```js
+'use strict';
+
+var mongobird = require('mongobird'),
+    connectionString = 'mongodb://localhost',
+    connection = mongobird.connect(connectionString),
+    anyDb = connection.getDb('anyDb'),
+    usersCollection = anyDb.getCollection('users'),
+    defaultUser = { username: 'anyUser' },
+    demoFinishedMessage = 'Demo finished succesfully. Have fun using mongobird';
+
+function findDefaultUser() {
+    return usersCollection.findOne({ username: defaultUser.username });
+}
+
+function assertDefaultUserDoesNotExist(user) {
+    if (user) {
+        throw new Error('Default user already exists');
+    }
+}
+
+function removeUser(user) {
+    console.log('Removing user:', user);
+
+    return usersCollection.remove({ username: user.username  });
+}
+
+module.exports = function () {
+    return usersCollection.remove({})
+        .then(findDefaultUser)
+        .then(assertDefaultUserDoesNotExist)
+        .then(usersCollection.insert.bind(null, defaultUser))
+        .tap(function (addedUsers) {
+            if (addedUsers.length !== 1) {
+                throw new Error('Not the right amount of users were added');
+            } else if (addedUsers[0].username !== defaultUser.username) {
+                throw new Error('Added user was not the default user');
+            }
+
+            console.log('Added default user:', defaultUser.username);
+        })
+        .then(findDefaultUser)
+        .then(function (user) {
+            if (!user) {
+                throw new Error('Default user does not exist');
+            }
+
+            return user;
+        })
+        .then(removeUser)
+        .then(function () {
+            throw new Error('Something bad happened');
+        })
+        .then(console.log.bind(null, 'This is not executed if there is an uncaught error'))
+        .catch(console.log.bind(null, 'Catching error'))
+        .then(console.log.bind(null, 'Error was handled in last catch step'))
+        .return(demoFinishedMessage)
+        .finally(function () {
+            // E.g. close the database connection
+        });
+};
+```
+
+1. Create a connection representation using the `connect` method providing a valid connection string (as specified in
+the [mongoDB documentation about connection strings](http://docs.mongodb.org/manual/reference/connection-string/)
+
+`connection = mongobird.connect(connectionString);`
+
+The `connect` method is a synchronous function. The reason for this is that `mongobird` connects to mongodb instances
+lazily and caches the used database connections once they are established.
+
+1. The returned `connection` object has the important method `getDb` which takes a database name and returns a database
+representation. The method works synchronous and does not connect to the database instantly but saves only the required
+data to connect to it later.
+
+`anyDb = connection.getDb('anyDb');`
+
+1. This returned database representation can be used to work on mongoDB collections. All
+[collection methods provided by the natice mongoDB driver]
+(http://mongodb.github.io/node-mongodb-native/2.0/api/Collection.html) are available and return `bluebird` Promises.
+Using one of these methods triggers a real connection to the specified mongo database.
+
+`usersCollection = anyDb.getCollection('users');`
+
+1. The most interesting part happens on this collection representation - some of the more common mongoDB methods are
+called and all is done using promises
+
+1.1. See the [general bluebird documentation](https://github.com/petkaantonov/bluebird) to learn more about promises in
+general and how `bluebird` promises help you writing better readable, understandable and good-looking (in the
+opinionated view of the creators of this library) way
+
+1.1. Read the more specific [bluebird api documentation](https://github.com/petkaantonov/bluebird/blob/master/API.md) to
+get used more specifically to the `bluebird` methods. E.g. you can find documentation on the very useful methods
+`Promise.tap` and `Promise.try` that were used in the example above
+
+1.1. One further very good read recommendation is the [documentation about promise anti-patterns]
+(https://github.com/petkaantonov/bluebird/wiki/Promise-anti-patterns)
+
 ## core concept and technology stack
 
 This project is in a very early state and many planned features are missing for now.

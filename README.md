@@ -137,39 +137,45 @@ module.exports = function () {
 ```
 
 1. Create a connection representation using the `connect` method providing a valid connection string (as specified in
-the [mongoDB documentation about connection strings](http://docs.mongodb.org/manual/reference/connection-string/)
+    the [mongoDB documentation about connection strings](http://docs.mongodb.org/manual/reference/connection-string/)
 
-`connection = mongobird.connect(connectionString);`
+    ```js
+    connection = mongobird.connect(connectionString);
+    ```
 
-The `connect` method is a synchronous function. The reason for this is that `mongobird` connects to mongodb instances
-lazily and caches the used database connections once they are established.
+    The `connect` method is a synchronous function. The reason for this is that `mongobird` connects to mongodb
+    instances lazily and caches the used database connections once they are established.
 
 2. The returned `connection` object has the important method `getDb` which takes a database name and returns a database
-representation. The method works synchronous and does not connect to the database instantly but saves only the required
-data to connect to it later.
+    representation. The method works synchronous and does not connect to the database instantly but saves only the required
+    data to connect to it later.
 
-`anyDb = connection.getDb('anyDb');`
+    ```js
+    anyDb = connection.getDb('anyDb');
+    ```
 
 3. This returned database representation can be used to work on mongoDB collections. All
-[collection methods provided by the natice mongoDB driver]
-(http://mongodb.github.io/node-mongodb-native/2.0/api/Collection.html) are available and return `bluebird` Promises.
-Using one of these methods triggers a real connection to the specified mongo database.
+    [collection methods provided by the natice mongoDB driver]
+    (http://mongodb.github.io/node-mongodb-native/2.0/api/Collection.html) are available and return `bluebird` Promises.
+    Using one of these methods triggers a real connection to the specified mongo database.
 
-`usersCollection = anyDb.getCollection('users');`
+    ```js
+    usersCollection = anyDb.getCollection('users');
+    ```
 
 4. The most interesting part happens on this collection representation - some of the more common mongoDB methods are
-called and all is done using promises
+    called and all is done using promises
 
-  1. See the [general bluebird documentation](https://github.com/petkaantonov/bluebird) to learn more about promises in
-general and how `bluebird` promises help you writing better readable, understandable and good-looking (in the
-opinionated view of the creators of this library) way
+    1. See the [general bluebird documentation](https://github.com/petkaantonov/bluebird) to learn more about promises 
+    in general and how `bluebird` promises help you writing better readable, understandable and good-looking (in the
+    opinionated view of the creators of this library) way
 
-  2. Read the more specific [bluebird api documentation](https://github.com/petkaantonov/bluebird/blob/master/API.md) to
-get used more specifically to the `bluebird` methods. E.g. you can find documentation on the very useful methods
-`Promise.tap` and `Promise.try` that were used in the example above
+    2. Read the more specific [bluebird api documentation](https://github.com/petkaantonov/bluebird/blob/master/API.md)
+    to get used more specifically to the `bluebird` methods. E.g. you can find documentation on the very useful methods
+    `Promise.tap` and `Promise.try` that were used in the example above
 
-  3. One further very good read recommendation is the [documentation about promise anti-patterns]
-(https://github.com/petkaantonov/bluebird/wiki/Promise-anti-patterns)
+    3. One further very good read recommendation is the [documentation about promise anti-patterns]
+    (https://github.com/petkaantonov/bluebird/wiki/Promise-anti-patterns)
 
 ## api
 

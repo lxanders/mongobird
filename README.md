@@ -24,6 +24,51 @@ Install the module via npm:
 npm install mongobird
 ```
 
+## usage
+
+This simple example connects to a mongoDB instance, gets a specific database and collections and uses this collection
+to add data and assert that it worked:
+
+```js
+var mongobird = require('mongobird'),
+    connectionString,
+    connection,
+    anyDb,
+    usersCollection;
+
+// The connection string specifies which mongoDB instance should be used
+connectionString = 'mongodb://localhost'
+
+// Create a connection representation using a connection string
+connection = mongobird.connect(connectionString)
+
+// Get a representation for any database that is available through the mongoDB instance that was specified through the
+// provided connection string
+anyDb = connection.getDb('anyDb')
+
+// Get a specific collection that is available through the database representation
+usersCollection = anyDb.getCollection('users')
+
+function logAddedUser(user) {
+    console.log('Added user ' + user.username);
+}
+
+// Note that all the methods used before this were working lazily - they did not really connect to any database
+usersCollection.insert({ username: 'anyUser' })
+    .tap(logAddedUser)
+    .then(usersCollection.count({ username: 'anyUser' })
+    .then(function (count) {
+        if (count !== 1) {
+            throw new Error('User was not added correctly or exists more than once');
+        }
+    })
+    .catch(function(error) {
+        console.log('Handle errors or rethrow them if you are not able to');
+    });
+```
+
+See the more detailed example above for a better understanding how everything works.
+
 ## core concept and technology stack
 
 This project is in a very early state and many planned features are missing for now.

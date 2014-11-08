@@ -171,6 +171,32 @@ get used more specifically to the `bluebird` methods. E.g. you can find document
 1.1. One further very good read recommendation is the [documentation about promise anti-patterns]
 (https://github.com/petkaantonov/bluebird/wiki/Promise-anti-patterns)
 
+## api
+
+* The `mongobird.connect` method provides a `connection representation`
+
+```js
+connection = mongobird.connect(connectionString);
+```
+
+* This `connection representation` can be used to get a `database representation`
+
+```js
+database = connection.getDb(databaseName);
+```
+
+* This `database representations` can be used to get  `collection representations`
+
+```js
+collection = database.getCollection(collectionName);
+```
+
+* These `collection representations` are a central part of `mongobird` (as they are in the native mongoDB driver). They
+offer all [collection methods provided by the natice mongoDB driver]
+(http://mongodb.github.io/node-mongodb-native/2.0/api/Collection.html) with one difference: The methods in the native
+driver rely on callbacks to handle what is done once they are finished. As `mongobird` works with promises this looks
+differently for them
+
 ## core concept and technology stack
 
 This project is in a very early state and many planned features are missing for now.

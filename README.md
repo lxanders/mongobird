@@ -16,11 +16,19 @@
 
 Bluebird aware mongoDB driver.
 
-## documentation
+## installation
 
-This project is in a very early state and has no clear documentation yet.
+Install the module via npm:
 
-Nevertheless there is some interesting information:
+```
+npm install mongobird
+```
+
+## core concept and technology stack
+
+This project is in a very early state and many planned features are missing for now.
+
+Nevertheless there is some interesting additional information:
 
 - The core concepts were discussed and can be found in [this issue](https://github.com/lxanders/mongobird/issues/1)
 - The technology stack was discussed and can be found in [this issue](https://github.com/lxanders/mongobird/issues/3)

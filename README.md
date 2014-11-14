@@ -75,7 +75,7 @@ to any specific database or collection before they are really used (e.g. for ins
 that errors accessing these databases or collection (e.g. for not existing databases) will be thrown later when the
 collection or database are really used.*
 
-See the more detailed example above for a better understanding how everything works.
+See the more detailed "explained example" below for a better understanding how everything works.
 
 ## explained example
 

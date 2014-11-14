@@ -52,10 +52,14 @@ function logAddedUser(user) {
     console.log('Added user ' + user.username);
 }
 
+function countUser(username) {
+    return usersCollection.count({ username: username });
+}
+
 // Note that all the methods used before this were working lazily - they did not really connect to any database
 usersCollection.insert({ username: 'anyUser' })
     .tap(logAddedUser)
-    .then(usersCollection.count({ username: 'anyUser' })
+    .then(countUser.bind(null, 'anyUser')
     .then(function (count) {
         if (count !== 1) {
             throw new Error('User was not added correctly or exists more than once');

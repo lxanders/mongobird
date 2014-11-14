@@ -93,7 +93,7 @@ var mongobird = require('mongobird'),
     demoFinishedMessage = 'Demo finished succesfully. Have fun using mongobird';
 
 function findDefaultUser() {
-    return usersCollection.findOne({ username: defaultUser.username });
+    return usersCollection.findOne(defaultUser);
 }
 
 function assertDefaultUserDoesNotExist(user) {

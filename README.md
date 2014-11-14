@@ -42,11 +42,10 @@ connectionString = 'mongodb://localhost'
 // Create a connection representation using a connection string
 connection = mongobird.connect(connectionString)
 
-// Get a representation for any database that is available through the mongoDB instance that was specified through the
-// provided connection string
+// Get a representation for any database through the mongoDB instance from above
 anyDb = connection.getDb('anyDb')
 
-// Get a specific collection that is available through the database representation
+// Get any collection through this database representation
 usersCollection = anyDb.getCollection('users')
 
 function logAddedUser(user) {

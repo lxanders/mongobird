@@ -37,16 +37,16 @@ var mongobird = require('mongobird'),
     usersCollection;
 
 // The connection string specifies which mongoDB instance should be used
-connectionString = 'mongodb://localhost'
+connectionString = 'mongodb://localhost';
 
 // Create a connection representation using a connection string
-connection = mongobird.connect(connectionString)
+connection = mongobird.connect(connectionString);
 
 // Get a representation for any database through the mongoDB instance from above
-anyDb = connection.getDb('anyDb')
+anyDb = connection.getDb('anyDb');
 
 // Get any collection through this database representation
-usersCollection = anyDb.getCollection('users')
+usersCollection = anyDb.getCollection('users');
 
 function logAddedUser(user) {
     console.log('Added user ' + user.username);

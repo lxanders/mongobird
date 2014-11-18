@@ -70,7 +70,7 @@ usersCollection.insert({ username: 'anyUser' })
     });
 ```
 
-*As mentioned above, it is important to understand, that the database and collection representations are notconnecting
+*As mentioned above, it is important to understand, that the database and collection representations are not connecting
 to any specific database or collection before they are really used (e.g. for inserting data). One consequence of this is
 that errors accessing these databases or collection (e.g. for not existing databases) will be thrown later when the
 collection or database are really used.*

@@ -163,7 +163,7 @@ module.exports = function () {
     ```
 
 3. This returned database representation can be used to work on mongoDB collections. All
-    [collection methods provided by the natice mongoDB driver]
+    [collection methods provided by the native mongoDB driver]
     (http://mongodb.github.io/node-mongodb-native/2.0/api/Collection.html) are available and return `bluebird` Promises.
     Using one of these methods triggers a real connection to the specified mongo database.
 
@@ -206,7 +206,7 @@ collection = database.getCollection(collectionName);
 ```
 
 * These `collection representations` are a central part of `mongobird` (as they are in the native mongoDB driver). They
-offer all [collection methods provided by the natice mongoDB driver]
+offer all [collection methods provided by the native mongoDB driver]
 (http://mongodb.github.io/node-mongodb-native/2.0/api/Collection.html) with one difference: The methods in the native
 driver rely on callbacks to handle what is done once they are finished. As `mongobird` works with promises this looks
 differently for them. Examples:

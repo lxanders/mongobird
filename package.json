@@ -10,7 +10,6 @@
         "pretest": "npm run lint",
         "test": "npm run unit-test --coverage",
         "posttest": "npm run check-coverage",
-        "report-coverage-html": "istanbul report html",
         "coveralls": "cat ./build/coverage/lcov.info | coveralls",
         "changelog": "pr-log"
     },

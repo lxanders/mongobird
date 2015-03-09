@@ -31,7 +31,7 @@
         "istanbul": "0.3.2",
         "coveralls": "2.11.2",
         "proxyquire": "1.0.1",
-        "pr-log": "1.0.0"
+        "pr-log": "1.1.0"
     },
     "repository": {
         "type": "git",

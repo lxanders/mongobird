@@ -6,11 +6,8 @@
     "plugins": [ "eslint-plugin-mocha" ],
 
     "rules": {
-        "max-statements": 0,
-        "no-undefined": 0,
         "no-unused-expressions": 0,
         "max-nested-callbacks": [2, 5],
-        "camelcase": 0,
         "mocha/no-exclusive-tests": 2
     }
 }

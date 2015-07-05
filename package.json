@@ -22,6 +22,7 @@
     },
     "devDependencies": {
         "mocha": "2.2.5",
+        "mongobox": "0.0.1",
         "sinon": "1.15.4",
         "sinon-chai": "2.8.0",
         "sinon-as-promised": "4.0.0",

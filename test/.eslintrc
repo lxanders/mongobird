@@ -3,6 +3,10 @@
         "mocha": true
     },
 
+    "globals": {
+        "MONGOBIRD_TEST_PORT": true
+    },
+
     "plugins": [ "eslint-plugin-mocha" ],
 
     "rules": {

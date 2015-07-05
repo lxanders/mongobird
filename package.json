@@ -6,9 +6,10 @@
     "scripts": {
         "lint": "eslint .",
         "check-coverage": "istanbul check-coverage --statement 100 --branch 100 --function 100 --lines 100",
-        "test:unit": "istanbul test _mocha test/ -- -R spec --recursive",
+        "test:unit": "istanbul test _mocha test/unit -- -R spec --recursive",
+        "test:functional": "mocha test/setupDatabase.js test/functional -R spec --recursive",
         "pretest": "npm run lint",
-        "test": "npm run test:unit --coverage",
+        "test": "npm run test:unit --coverage && npm run test:functional",
         "posttest": "npm run check-coverage",
         "coveralls": "cat ./build/coverage/lcov.info | coveralls",
         "changelog": "pr-log"

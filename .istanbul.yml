@@ -6,6 +6,7 @@ instrumentation:
     - 'build/**'
   embed-source: false
   complete-copy: false
+  include-all-sources: true
 reporting:
   print: summary
   reporty:

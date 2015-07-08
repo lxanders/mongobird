@@ -4,6 +4,7 @@ var chai = require('chai'),
     expect = chai.expect,
     mongodb = require('mongodb'),
     sinon = require('sinon'),
+    Promise = require('bluebird'),
     database = require('../../lib/database');
 
 chai.use(require('sinon-chai'));
@@ -72,11 +73,12 @@ describe('database', function () {
         beforeEach(function () {
             db = getDb('anyDb');
             connect = sinon.stub(mongodb.MongoClient, 'connect');
-            connect.yields(null, {});
+            connect.yields(null, { close: sinon.stub().yields() });
         });
 
-        afterEach(function () {
+        afterEach(function (done) {
             connect.restore();
+            database.close().nodeify(done);
         });
 
         it('should establish a connection only once', function () {
@@ -94,6 +96,52 @@ describe('database', function () {
                 .then(function (secondConnection) {
                     expect(connect).not.to.have.been.called;
                     expect(secondConnection).to.equal(connection);
+                });
+        });
+    });
+
+    describe('closing connection', function () {
+        var db,
+            connect,
+            connection;
+
+        beforeEach(function () {
+            connect = sinon.stub(mongodb.MongoClient, 'connect');
+
+            connection = { close: sinon.stub().yields() };
+
+            connect.withArgs('mongodb://user:pass@host:27017,different:1234/anyDb?any=true&no=1').yields(null, connection);
+            db = getDb('anyDb');
+        });
+
+        afterEach(function () {
+            connect.restore();
+        });
+
+        it('should close a single database connection', function () {
+            return db.ensureConnection(db.connectionString)
+                .then(db.close)
+                .then(function () {
+                    expect(connection.close).to.have.been.calledOnce;
+                });
+        });
+
+        it('should close every connection', function () {
+            var otherDb,
+                otherConnection = { close: sinon.stub().yields() };
+
+            connect.withArgs('mongodb://user:pass@host:27017,different:1234/otherDb?any=true&no=1').yields(null, otherConnection);
+
+            otherDb = getDb('otherDb');
+
+            return Promise.join(
+                    db.ensureConnection(db.connectionString),
+                    otherDb.ensureConnection(otherDb.connectionString)
+                )
+                .then(database.close)
+                .then(function () {
+                    expect(connection.close).to.have.been.calledOnce;
+                    expect(otherConnection.close).to.have.been.calledOnce;
                 });
         });
     });

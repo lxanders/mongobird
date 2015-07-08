@@ -105,12 +105,16 @@ describe('database', function () {
             connect,
             connection;
 
+        function buildDummyConnectionStringForDb(dbName) {
+            return 'mongodb://user:pass@host:27017,different:1234/' + dbName + '?any=true&no=1';
+        }
+
         beforeEach(function () {
             connect = sinon.stub(mongodb.MongoClient, 'connect');
 
             connection = { close: sinon.stub().yields() };
 
-            connect.withArgs('mongodb://user:pass@host:27017,different:1234/anyDb?any=true&no=1').yields(null, connection);
+            connect.withArgs(buildDummyConnectionStringForDb('anyDb')).yields(null, connection);
             db = getDb('anyDb');
         });
 
@@ -126,11 +130,20 @@ describe('database', function () {
                 });
         });
 
+        it('should not close the same connection more than once', function () {
+            return db.ensureConnection(db.connectionString)
+                .then(db.close)
+                .then(db.close)
+                .then(function () {
+                    expect(connection.close).to.have.been.calledOnce;
+                });
+        });
+
         it('should close every connection', function () {
             var otherDb,
                 otherConnection = { close: sinon.stub().yields() };
 
-            connect.withArgs('mongodb://user:pass@host:27017,different:1234/otherDb?any=true&no=1').yields(null, otherConnection);
+            connect.withArgs(buildDummyConnectionStringForDb('otherDb')).yields(null, otherConnection);
 
             otherDb = getDb('otherDb');
 
